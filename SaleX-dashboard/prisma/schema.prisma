@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Store {
+  id         String       @id @default(cuid())
+  name       String
+  userId     String
+  billboard  BillBoard[]  @relation("StoretoBillboards")
+  categories Categories[] @relation("StoretoCategories")
+  sizes      Sizes[]      @relation("StoretoSizes")
+  colors     Colors[]     @relation("StoretoColors")
+  Products   Products[]   @relation("StoretoProducts")
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  order      Order[]      @relation("StoreToOrder")
+}
+
+model BillBoard {
+  id         String       @id @default(cuid())
+  label      String
+  ImageUrl   String
+  StoreId    String
+  store      Store        @relation("StoretoBillboards", fields: [StoreId], references: [id])
+  categories Categories[] @relation("BillboardtoCategories")
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+}
+
+model Categories {
+  id          String     @id @default(cuid())
+  StoreId     String
+  store       Store      @relation("StoretoCategories", fields: [StoreId], references: [id])
+  billboardId String
+  billboard   BillBoard  @relation("BillboardtoCategories", fields: [billboardId], references: [id])
+  name        String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Products    Products[] @relation("ProducttoCategory")
+}
+
+model Sizes {
+  id        String     @id @default(cuid())
+  StoreId   String
+  store     Store      @relation("StoretoSizes", fields: [StoreId], references: [id])
+  name      String
+  value     String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Products  Products[] @relation("ProducttoSizes")
+}
+
+model Colors {
+  id        String     @id @default(cuid())
+  StoreId   String
+  store     Store      @relation("StoretoColors", fields: [StoreId], references: [id])
+  name      String
+  value     String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Products  Products[] @relation("ProducttoColor")
+}
+
+model Products {
+  id           String      @id @default(cuid())
+  StoreId      String
+  store        Store       @relation("StoretoProducts", fields: [StoreId], references: [id])
+  CategoriesId String
+  categories   Categories  @relation("ProducttoCategory", fields: [CategoriesId], references: [id])
+  sizesId      String
+  size         Sizes       @relation("ProducttoSizes", fields: [sizesId], references: [id])
+  colorId      String
+  color        Colors      @relation("ProducttoColor", fields: [colorId], references: [id])
+  name         String
+  price        Decimal
+  Featured     Boolean     @default(false)
+  Archived     Boolean     @default(false)
+  Image        Image[]     @relation("ProducttoImage")
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  orderItem    OrderItem[] @relation("ProducttoOrderitem")
+}
+
+model Image {
+  id        String   @id @default(cuid())
+  productId String
+  product   Products @relation("ProducttoImage", fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id         String      @id @default(cuid())
+  StoreId    String // Foreign Key to Store
+  store      Store       @relation("StoreToOrder", fields: [StoreId], references: [id])
+  orderItems OrderItem[] // Relation to OrderItem model
+  name       String      @default("Lorem ipsum")
+  Email      String      @default("loremipsum@random.com")
+  isPaid     Boolean     @default(false)
+  phone      String      @default("")
+  address    String      @default("")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+// Intermediary for a many-to-many relationship
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String // Foreign Key to Order
+  order     Order    @relation(fields: [orderId], references: [id])
+  productId String // Foreign Key to Product
+  product   Products @relation("ProducttoOrderitem", fields: [productId], references: [id])
+}
