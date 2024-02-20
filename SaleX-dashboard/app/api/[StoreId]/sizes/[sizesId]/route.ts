@@ -12,7 +12,7 @@ export async function GET(
       return new NextResponse("Size id is required", { status: 400 });
     }
 
-    const sizes = await prisma.sizes.findUnique({
+    const sizes = await prisma.weight.findUnique({
       where: {
         id: params.sizesId,
       },
@@ -51,7 +51,7 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
-    const sizes = await prisma.sizes.delete({
+    const sizes = await prisma.weight.delete({
       where: {
         id: params.sizesId,
       },
@@ -100,7 +100,7 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
-    const sizes = await prisma.sizes.update({
+    const sizes = await prisma.weight.update({
       where: {
         id: params.sizesId,
       },

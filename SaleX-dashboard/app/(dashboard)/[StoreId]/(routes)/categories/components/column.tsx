@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { ColumnDef } from "@tanstack/react-table";
 import CellActions from "./Cell-Actions";
 
@@ -8,9 +7,7 @@ import CellActions from "./Cell-Actions";
 export type CategoryColumn = {
   id: string;
   name: string;
-  billboardLabel: string;
   createdAt: string;
-  ImageUrl: string;
 };
 
 export const columns: ColumnDef<CategoryColumn>[] = [
@@ -19,25 +16,8 @@ export const columns: ColumnDef<CategoryColumn>[] = [
     header: "Name",
   },
   {
-    accessorKey: "billboardLabel",
-    header: "Billboard",
-  },
-
-  {
     accessorKey: "createdAt",
     header: "Date",
-  },
-  {
-    header: "Preview",
-    id: "preview",
-    cell: ({ row }) => {
-      const data = row.original;
-      return (
-        <>
-          <Image src={data.ImageUrl} alt={data.name} width={70} height={5} />
-        </>
-      );
-    },
   },
   {
     id: "actions",

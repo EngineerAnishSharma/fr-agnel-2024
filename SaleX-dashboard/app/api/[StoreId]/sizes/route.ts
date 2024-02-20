@@ -39,7 +39,7 @@ export async function POST(
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
-    const sizes = await prisma.sizes.create({
+    const sizes = await prisma.weight.create({
       data: {
         name,
         value,
@@ -63,7 +63,7 @@ export async function GET(
       return new NextResponse("Store id is required", { status: 400 });
     }
 
-    const size = await prisma.sizes.findMany({
+    const size = await prisma.weight.findMany({
       where: {
         StoreId: params.StoreId,
       },

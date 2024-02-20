@@ -19,7 +19,7 @@ export async function GET(
       include: {
         Image: true,
         categories: true,
-        size: true,
+        weight: true,
         color: true,
       },
     });
@@ -88,6 +88,8 @@ export async function PUT(
       sizesId,
       Featured,
       Archived,
+      expiryDate,
+      quantity
     } = body;
 
     if (!userId) {
@@ -148,6 +150,8 @@ export async function PUT(
         },
         Featured,
         Archived,
+        expiryDate,
+        quantity
       },
     });
 

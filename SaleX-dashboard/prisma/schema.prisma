@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -17,7 +17,7 @@ model Store {
   userId     String
   billboard  BillBoard[]  @relation("StoretoBillboards")
   categories Categories[] @relation("StoretoCategories")
-  sizes      Sizes[]      @relation("StoretoSizes")
+  weight     Weight[]     @relation("StoretoSizes")
   colors     Colors[]     @relation("StoretoColors")
   Products   Products[]   @relation("StoretoProducts")
   createdAt  DateTime     @default(now())
@@ -26,29 +26,26 @@ model Store {
 }
 
 model BillBoard {
-  id         String       @id @default(cuid())
-  label      String
-  ImageUrl   String
-  StoreId    String
-  store      Store        @relation("StoretoBillboards", fields: [StoreId], references: [id])
-  categories Categories[] @relation("BillboardtoCategories")
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
+  id        String   @id @default(cuid())
+  label     String
+  ImageUrl  String
+  StoreId   String
+  store     Store    @relation("StoretoBillboards", fields: [StoreId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Categories {
-  id          String     @id @default(cuid())
-  StoreId     String
-  store       Store      @relation("StoretoCategories", fields: [StoreId], references: [id])
-  billboardId String
-  billboard   BillBoard  @relation("BillboardtoCategories", fields: [billboardId], references: [id])
-  name        String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  Products    Products[] @relation("ProducttoCategory")
+  id        String     @id @default(cuid())
+  StoreId   String
+  store     Store      @relation("StoretoCategories", fields: [StoreId], references: [id])
+  name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Products  Products[] @relation("ProducttoCategory")
 }
 
-model Sizes {
+model Weight {
   id        String     @id @default(cuid())
   StoreId   String
   store     Store      @relation("StoretoSizes", fields: [StoreId], references: [id])
@@ -56,7 +53,7 @@ model Sizes {
   value     String
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  Products  Products[] @relation("ProducttoSizes")
+  Products  Products[] @relation("ProducttoWeight")
 }
 
 model Colors {
@@ -77,13 +74,15 @@ model Products {
   CategoriesId String
   categories   Categories  @relation("ProducttoCategory", fields: [CategoriesId], references: [id])
   sizesId      String
-  size         Sizes       @relation("ProducttoSizes", fields: [sizesId], references: [id])
+  weight       Weight      @relation("ProducttoWeight", fields: [sizesId], references: [id])
   colorId      String
   color        Colors      @relation("ProducttoColor", fields: [colorId], references: [id])
   name         String
   price        Decimal
+  quantity     Int         @default(1)
   Featured     Boolean     @default(false)
   Archived     Boolean     @default(false)
+  expiryDate   Int         @default(6)
   Image        Image[]     @relation("ProducttoImage")
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
