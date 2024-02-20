@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "bot": "tsx scripts/bot.ts"
+    "bot": "tsx scripts/bot.js"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.21.15",
@@ -32,7 +32,7 @@
     "@upstash/ratelimit": "^0.4.4",
     "@upstash/redis": "^1.28.4",
     "autoprefixer": "10.4.14",
-    "axios": "^1.4.0",
+    "axios": "^1.6.7",
     "class-variance-authority": "^0.6.1",
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
