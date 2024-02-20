@@ -1,3 +1,4 @@
+import subprocess
 from flask import Flask, request, jsonify
 import os
 import easyocr
@@ -166,6 +167,17 @@ import pandas as pd
 #     response = jsonify({"user_id": user_id, "recommendations": recommended_items})
     
 #     return response
+
+@app.route('/facebook-webhook', methods=['POST'])
+def facebook_webhook():
+    try:
+        data = request.json
+        # Process the data as needed
+        print(data)
+        return jsonify({'status': 'success'}), 200
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
 
