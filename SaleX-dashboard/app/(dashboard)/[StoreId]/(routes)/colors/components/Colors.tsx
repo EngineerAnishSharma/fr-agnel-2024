@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { DataTable } from "../../../../../../components/ui/data-table";
 import { ColorsColumn, columns } from "./column";
 import ApiList from "../../../../../../components/ui/api-list";
+import useDevCheckStore from "@/store/dev-check";
 
 type ColorsProps = {
   ColorsData: ColorsColumn[];
@@ -17,6 +18,7 @@ type ColorsProps = {
 const Colors = ({ ColorsData }: ColorsProps) => {
   const router = useRouter();
   const params = useParams();
+  const { devMode } = useDevCheckStore();
 
   return (
     <>
@@ -40,12 +42,16 @@ const Colors = ({ ColorsData }: ColorsProps) => {
       <Separator />
       <DataTable searchKey="name" columns={columns} data={ColorsData} />
       <div className="w-full mt-10 ml-2">
-        <Heading
-          title={"Api"}
-          description="Api's to connected frontend and backend"
-        />
-        <Separator />
-        <ApiList Entityname="colors" EntityIdname="{ColorsId}" />
+        {devMode && (
+          <>
+            <Heading
+              title={"Api"}
+              description="Api's to connected frontend and backend"
+            />
+            <Separator />
+            <ApiList Entityname="colors" EntityIdname="{ColorsId}" />
+          </>
+        )}
       </div>
     </>
   );

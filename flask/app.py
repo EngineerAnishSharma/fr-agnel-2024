@@ -121,12 +121,61 @@ def analyze():
 
 
 
+        
+
+def get_recommendations(data, user_id, top_n, algo):
+    
+    # Creating an empty list to store the recommended item ids
+    recommendations = []
+    
+    # Creating an user item interactions matrix 
+    user_item_interactions_matrix = data.pivot(index='user_id', columns='item_id', values='rating')
+    
+    # Extracting those item ids which the user_id has not interacted yet
+    non_interacted_items = user_item_interactions_matrix.loc[user_id][user_item_interactions_matrix.loc[user_id].isnull()].index.tolist()
+    
+    # Looping through each of the item id which user_id has not interacted yet
+    for item_id in non_interacted_items:
+        
+        # Predicting the ratings for those non interacted item ids by this user
+        est = algo.predict(user_id, item_id).est
+        
+        # appending the predicted ratings
+        recommendations.append((item_id, est))
+
+    # sorting the predicted ratings in descending order
+    recommendations.sort(key=lambda x: x[1], reverse=True)
+
+    return recommendations[:top_n] # Returing top n highest predicted rating items for this user
+
+import pandas as pd
+# Define the endpoint for recommendations
+# @app.route('/recommendations', methods=['GET'])
+# def recommendations():
+    
+        
+#     # Get user_id and top_n from the query parameters
+#     user_id = int(request.args.get('user_id'))
+#     top_n = int(request.args.get('top_n', 5))  # Default to 5 if not provided
+#     data = pd.read_csv("data.csv")
+
+#     # Call your get_recommendations function
+#     recommended_items = get_recommendations(data, user_id, top_n, loaded_recommendations_top)
+    
+#     # Convert recommendations to a JSON response
+#     response = jsonify({"user_id": user_id, "recommendations": recommended_items})
+    
+#     return response
+
+
+
 
 if __name__ == '__main__':
     print("Starting Python flask Server...")
+    # with open("recommendations_top.pkl", 'rb') as file:
+    #     loaded_recommendations_top = pickle.load(file)
     ngrok_tunnel = ngrok.connect(5000)
     print('Public URL:', ngrok_tunnel.public_url)
     nest_asyncio.apply()
-    # load_saved_artifacts()
     app.run()
 
