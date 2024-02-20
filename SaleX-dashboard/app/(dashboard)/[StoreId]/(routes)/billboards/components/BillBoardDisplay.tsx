@@ -9,46 +9,51 @@ import { Separator } from "@/components/ui/separator";
 import { DataTable } from "../../../../../../components/ui/data-table";
 import { columns } from "./TableColumn";
 import ApiList from "../../../../../../components/ui/api-list";
+import useDevCheckStore from "@/store/dev-check";
 
-type billboardsprops ={
-  BillboardData :BillBoard[] 
-}
-const Billboards = ({BillboardData}:billboardsprops) => {
+type billboardsprops = {
+  BillboardData: BillBoard[];
+};
+const Billboards = ({ BillboardData }: billboardsprops) => {
   const router = useRouter();
   const params = useParams();
-  const FilteredData = BillboardData.map((bill)=>(
-    {
-      label:bill.label,
-      createdAt:(bill.createdAt).toDateString(),
-      id:bill.id,
-      ImageUrl:bill.ImageUrl,
-    }
-  ))
+  const { devMode } = useDevCheckStore();
+  const FilteredData = BillboardData.map((bill) => ({
+    label: bill.label,
+    createdAt: bill.createdAt.toDateString(),
+    id: bill.id,
+    ImageUrl: bill.ImageUrl,
+  }));
   return (
     <>
-    <div className="flex items-center justify-between">
-      <div>
-        <Heading
-          title={`Billboards(${BillboardData.length})`}
-          description="Create and manage billboards"
-        />
+      <div className="flex items-center justify-between">
+        <div>
+          <Heading
+            title={`Billboards(${BillboardData.length})`}
+            description="Create and manage billboards"
+          />
+        </div>
+        <Button
+          onClick={() => {
+            router.push(`/${params.StoreId}/billboards/new`);
+          }}
+          className="gap-x-2 hover:bg-secondary hover:text-primary"
+        >
+          <Plus className="h-5 w-4" />
+          New
+        </Button>
       </div>
-      <Button
-        onClick={() => {
-          router.push(`/${params.StoreId}/billboards/new`);
-        }}
-        className="gap-x-2 hover:bg-secondary hover:text-primary"
-      >
-        <Plus className="h-5 w-4" />
-        New
-      </Button>
-    </div>
-    <Separator/>
-      <DataTable searchKey="label" columns={columns} data={FilteredData}/>
+      <Separator />
+      <DataTable searchKey="label" columns={columns} data={FilteredData} />
       <div className="w-full mt-10 ml-2">
-      <Heading title={'Api'} description="Api's to connected frontend and backend"/>
-      <Separator/>
-      <ApiList Entityname="billboards" EntityIdname="billboardId"/>
+        <Heading
+          title={"Api"}
+          description="Api's to connected frontend and backend"
+        />
+        <Separator />
+        {devMode && (
+          <ApiList Entityname="billboards" EntityIdname="billboardId" />
+        )}
       </div>
     </>
   );
