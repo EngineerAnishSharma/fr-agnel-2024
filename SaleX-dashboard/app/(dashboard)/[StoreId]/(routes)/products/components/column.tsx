@@ -16,6 +16,7 @@ export type FilteredDataProps = {
   color: string;
   quantity:number;
   createdAt: string;
+  ImageUrl:string
 };
 
 

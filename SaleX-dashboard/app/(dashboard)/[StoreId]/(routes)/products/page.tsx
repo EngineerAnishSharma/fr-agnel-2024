@@ -12,6 +12,7 @@ const BillboardPage = async ({ params }: { params: { StoreId: string } }) => {
       categories: true,
       color: true,
       weight: true,
+      Image:true
     },
     orderBy: {
       updatedAt: "desc",
@@ -25,11 +26,12 @@ const BillboardPage = async ({ params }: { params: { StoreId: string } }) => {
     archived: product.Archived,
     featured: product.Featured,
     categoryname: product.categories.name,
-    size: product.weight.name,
-    color: product.color.value,
+    size: product.weight.value.toString(), // Convert to string
+    color: product.color.value.toString(), // Convert to string
     expiryData: product.expiryDate,
-    quantity:product.quantity,
+    quantity: product.quantity,
     createdAt: product.createdAt.toLocaleDateString(),
+    ImageUrl: product.Image[0].url
   }));
   return (
     <div className="flex flex-col">

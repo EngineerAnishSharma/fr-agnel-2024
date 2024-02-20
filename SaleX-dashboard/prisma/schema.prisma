@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,14 +12,14 @@ model Store {
   id         String       @id @default(cuid())
   name       String
   userId     String
-  billboard  BillBoard[]  @relation("StoretoBillboards")
-  categories Categories[] @relation("StoretoCategories")
-  weight     Weight[]     @relation("StoretoSizes")
-  colors     Colors[]     @relation("StoretoColors")
-  Products   Products[]   @relation("StoretoProducts")
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
+  billboard  BillBoard[]  @relation("StoretoBillboards")
+  categories Categories[] @relation("StoretoCategories")
+  colors     Colors[]     @relation("StoretoColors")
   order      Order[]      @relation("StoreToOrder")
+  Products   Products[]   @relation("StoretoProducts")
+  weight     Weight[]     @relation("StoretoSizes")
 }
 
 model BillBoard {
@@ -30,79 +27,79 @@ model BillBoard {
   label     String
   ImageUrl  String
   StoreId   String
-  store     Store    @relation("StoretoBillboards", fields: [StoreId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  store     Store    @relation("StoretoBillboards", fields: [StoreId], references: [id])
 }
 
 model Categories {
   id        String     @id @default(cuid())
   StoreId   String
-  store     Store      @relation("StoretoCategories", fields: [StoreId], references: [id])
   name      String
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  store     Store      @relation("StoretoCategories", fields: [StoreId], references: [id])
   Products  Products[] @relation("ProducttoCategory")
 }
 
 model Weight {
   id        String     @id @default(cuid())
   StoreId   String
-  store     Store      @relation("StoretoSizes", fields: [StoreId], references: [id])
   name      String
-  value     String
+  value     BigInt
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   Products  Products[] @relation("ProducttoWeight")
+  store     Store      @relation("StoretoSizes", fields: [StoreId], references: [id])
 }
 
 model Colors {
   id        String     @id @default(cuid())
   StoreId   String
-  store     Store      @relation("StoretoColors", fields: [StoreId], references: [id])
   name      String
   value     String
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  store     Store      @relation("StoretoColors", fields: [StoreId], references: [id])
   Products  Products[] @relation("ProducttoColor")
 }
 
 model Products {
   id           String      @id @default(cuid())
   StoreId      String
-  store        Store       @relation("StoretoProducts", fields: [StoreId], references: [id])
   CategoriesId String
-  categories   Categories  @relation("ProducttoCategory", fields: [CategoriesId], references: [id])
   sizesId      String
-  weight       Weight      @relation("ProducttoWeight", fields: [sizesId], references: [id])
   colorId      String
-  color        Colors      @relation("ProducttoColor", fields: [colorId], references: [id])
   name         String
   price        Decimal
-  quantity     Int         @default(1)
   Featured     Boolean     @default(false)
   Archived     Boolean     @default(false)
-  expiryDate   Int         @default(6)
-  Image        Image[]     @relation("ProducttoImage")
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+  expiryDate   Int         @default(6)
+  quantity     Int         @default(1)
+  popularity   Boolean     @default(false)
+  profitMargin Int         @default(10)
+  Image        Image[]     @relation("ProducttoImage")
   orderItem    OrderItem[] @relation("ProducttoOrderitem")
+  categories   Categories  @relation("ProducttoCategory", fields: [CategoriesId], references: [id])
+  store        Store       @relation("StoretoProducts", fields: [StoreId], references: [id])
+  color        Colors      @relation("ProducttoColor", fields: [colorId], references: [id])
+  weight       Weight      @relation("ProducttoWeight", fields: [sizesId], references: [id])
 }
 
 model Image {
   id        String   @id @default(cuid())
   productId String
-  product   Products @relation("ProducttoImage", fields: [productId], references: [id], onDelete: Cascade)
   url       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  product   Products @relation("ProducttoImage", fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Order {
   id         String      @id @default(cuid())
-  StoreId    String // Foreign Key to Store
-  store      Store       @relation("StoreToOrder", fields: [StoreId], references: [id])
-  orderItems OrderItem[] // Relation to OrderItem model
+  StoreId    String
   name       String      @default("Lorem ipsum")
   Email      String      @default("loremipsum@random.com")
   isPaid     Boolean     @default(false)
@@ -110,13 +107,14 @@ model Order {
   address    String      @default("")
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
+  store      Store       @relation("StoreToOrder", fields: [StoreId], references: [id])
+  orderItems OrderItem[]
 }
 
-// Intermediary for a many-to-many relationship
 model OrderItem {
   id        String   @id @default(cuid())
-  orderId   String // Foreign Key to Order
+  orderId   String
+  productId String
   order     Order    @relation(fields: [orderId], references: [id])
-  productId String // Foreign Key to Product
   product   Products @relation("ProducttoOrderitem", fields: [productId], references: [id])
 }
