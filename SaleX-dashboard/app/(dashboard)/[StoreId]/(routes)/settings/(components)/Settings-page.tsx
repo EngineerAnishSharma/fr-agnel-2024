@@ -24,6 +24,7 @@ import { AlertModal } from "../../../../../../components/modals-and-nav/Alert-mo
 import { Separator } from "@/components/ui/separator";
 import UseOrigin from "@/hooks/origin-client";
 import ApiBlock from "@/components/ui/api-block";
+import useDevCheckStore from "@/store/dev-check";
 
 type SettingsProps = {
   name: string;
@@ -37,6 +38,7 @@ const SettingsPage = ({ name, id }: SettingsProps) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const origin = UseOrigin();
+  const { devMode, toggleDevMode } = useDevCheckStore();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -120,6 +122,15 @@ const SettingsPage = ({ name, id }: SettingsProps) => {
                 </FormItem>
               )}
             />
+            <div className="space-y-2 flex-col mt-6 mb-10 flex  justify-center ">
+              <label className="font-bold text-sm">Dev Mode</label>
+              <input
+                type="checkbox"
+                className="h-5 w-5"
+                checked={devMode}
+                onChange={toggleDevMode}
+              />
+            </div>
             <div className={cn("flex ")}>
               <Button
                 className="hover:bg-white hover:text-black hover:border-black border-2 px-3 "
@@ -133,11 +144,13 @@ const SettingsPage = ({ name, id }: SettingsProps) => {
         </Form>
       </div>
       <Separator className="mx-6 mt-2 " />
-      <ApiBlock
-        title="NEXT_PUBLIC_API_URL"
-        description={`${origin}/api/${id}`}
-        variant="public"
-      />
+      {devMode && (
+        <ApiBlock
+          title="NEXT_PUBLIC_API_URL"
+          description={`${origin}/api/${id}`}
+          variant="public"
+        />
+      )}
     </>
   );
 };

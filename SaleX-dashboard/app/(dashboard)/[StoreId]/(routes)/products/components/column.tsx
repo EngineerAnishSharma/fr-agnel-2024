@@ -10,11 +10,14 @@ export type FilteredDataProps = {
   price: string;
   archived: boolean;
   featured: boolean;
+  expiryData:number;
   categoryname: string;
   size: string;
   color: string;
+  quantity:number;
   createdAt: string;
 };
+
 
 export const columns: ColumnDef<FilteredDataProps>[] = [
   {
@@ -22,24 +25,24 @@ export const columns: ColumnDef<FilteredDataProps>[] = [
     header: "Name",
   },
   {
-    accessorKey: "archived",
-    header: "Archived",
-  },
-  {
-    accessorKey: "featured",
-    header: "Featured",
-  },
-  {
     accessorKey: "price",
     header: "Price",
   },
   {
     accessorKey: "size",
-    header: "Size",
+    header: "Weight",
   },
   {
     accessorKey: "categoryname",
     header: "Category",
+  },
+  {
+    accessorKey:'quantity',
+    header:'Quantity'
+  },
+  {
+    accessorKey: "expiryData",
+    header: "Expiry Date(in months)",
   },
   {
     accessorKey: "color",
@@ -58,7 +61,6 @@ export const columns: ColumnDef<FilteredDataProps>[] = [
     accessorKey: "createdAt",
     header: "Date",
   },
-
   {
     id: "actions",
     cell: ({ row }) => <CellActions data={row.original} />,

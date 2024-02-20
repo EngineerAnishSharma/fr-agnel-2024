@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { DataTable } from "../../../../../../components/ui/data-table";
 import { FilteredDataProps, columns } from "./column";
 import ApiList from "../../../../../../components/ui/api-list";
+import useDevCheckStore from "@/store/dev-check";
 
 type ProductsProps = {
   ProductsData: FilteredDataProps[];
@@ -17,6 +18,7 @@ type ProductsProps = {
 const Products = ({ ProductsData }: ProductsProps) => {
   const router = useRouter();
   const params = useParams();
+  const { devMode } = useDevCheckStore();
 
   return (
     <>
@@ -40,12 +42,16 @@ const Products = ({ ProductsData }: ProductsProps) => {
       <Separator />
       <DataTable searchKey="name" columns={columns} data={ProductsData} />
       <div className="w-full mt-10 ml-2">
-        <Heading
-          title={"Api"}
-          description="Api's to connected frontend and backend"
-        />
-        <Separator />
-        <ApiList Entityname="products" EntityIdname="{ProductsId}" />
+        {devMode && (
+          <>
+            <Heading
+              title={"Api"}
+              description="Api's to connected frontend and backend"
+            />
+            <Separator />
+            <ApiList Entityname="products" EntityIdname="{ProductsId}" />
+          </>
+        )}
       </div>
     </>
   );

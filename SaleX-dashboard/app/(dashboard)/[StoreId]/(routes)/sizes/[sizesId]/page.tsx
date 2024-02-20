@@ -1,13 +1,9 @@
 import prisma from "@/prisma/client";
-import SizeForm from "./components/sizes-form";
 
+import WeightForm from "./components/sizes-form";
 
-const SizePage = async ({
-  params,
-}: {
-  params: { sizesId: string };
-}) => {
-  const sizes = await prisma.sizes.findUnique({
+const WeightIDPage = async ({ params }: { params: { sizesId: string } }) => {
+  const weights = await prisma.weight.findUnique({
     where: {
       id: params.sizesId,
     },
@@ -16,10 +12,10 @@ const SizePage = async ({
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <SizeForm initialdata={sizes} />
+        <WeightForm initialdata={weights} />
       </div>
     </div>
   );
 };
 
-export default SizePage;
+export default WeightIDPage;

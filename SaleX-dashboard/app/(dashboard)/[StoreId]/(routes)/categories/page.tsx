@@ -8,9 +8,6 @@ const CategoriesPage = async ({ params }: { params: { StoreId: string } }) => {
     where: {
       StoreId: params.StoreId,
     },
-    include:{
-        billboard:true
-    },
     orderBy: {
       updatedAt: "desc",
     },
@@ -18,12 +15,9 @@ const CategoriesPage = async ({ params }: { params: { StoreId: string } }) => {
   
   const FilteredData = FindCategories.map((cat)=>(
     {
-        ImageUrl:cat.billboard.ImageUrl,
         id:cat.id,
         name:cat.name,
-        billboardLabel:cat.billboard.label,
         createdAt:cat.createdAt.toLocaleDateString()
-
     }
   ))
   return (

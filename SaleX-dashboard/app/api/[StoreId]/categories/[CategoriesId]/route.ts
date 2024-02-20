@@ -15,9 +15,6 @@ export async function GET(
     const categories = await prisma.categories.findUnique({
       where: {
         id: params.CategoriesId
-      },
-      include: {
-        billboard: true
       }
     });
   
@@ -77,15 +74,12 @@ export async function PATCH(
 
     const body = await req.json();
     
-    const { name, billboardId } = body;
+    const { name } = body;
     
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
     }
 
-    if (!billboardId) {
-      return new NextResponse("Billboard ID is required", { status: 400 });
-    }
 
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
@@ -112,7 +106,6 @@ export async function PATCH(
       },
       data: {
         name,
-        billboardId
       }
     });
   

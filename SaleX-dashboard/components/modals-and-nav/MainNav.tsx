@@ -16,14 +16,14 @@ const MainNav = ({className,...props}:React.HtmlHTMLAttributes<HTMLElement>) => 
             active:pathname === `/${params.StoreId}`
         },
         {
-            href:`/${params.StoreId}/billboards`,
-            label:'Billboards',
-            active:pathname === `/${params.StoreId}/billboards`
-        },
-        {
             href:`/${params.StoreId}/categories`,
             label:'Categories',
             active:pathname === `/${params.StoreId}/categories`  
+        },
+        {
+            href:`/${params.StoreId}/inventory`,
+            label:'Inventory',
+            active:pathname === `/${params.StoreId}/inventory`
         },
         {
             href:`/${params.StoreId}/colors`,
@@ -32,7 +32,7 @@ const MainNav = ({className,...props}:React.HtmlHTMLAttributes<HTMLElement>) => 
         },
         {
             href:`/${params.StoreId}/sizes`,
-            label:'Sizes',
+            label:'Weights',
             active:pathname === `/${params.StoreId}/sizes`  
         },
         {

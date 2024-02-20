@@ -11,7 +11,7 @@ const BillboardPage = async ({ params }: { params: { StoreId: string } }) => {
     include: {
       categories: true,
       color: true,
-      size: true,
+      weight: true,
     },
     orderBy: {
       updatedAt: "desc",
@@ -25,8 +25,10 @@ const BillboardPage = async ({ params }: { params: { StoreId: string } }) => {
     archived: product.Archived,
     featured: product.Featured,
     categoryname: product.categories.name,
-    size: product.size.name,
+    size: product.weight.name,
     color: product.color.value,
+    expiryData: product.expiryDate,
+    quantity:product.quantity,
     createdAt: product.createdAt.toLocaleDateString(),
   }));
   return (

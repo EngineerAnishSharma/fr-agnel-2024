@@ -13,9 +13,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { AlertModal } from "../../../../../../components/modals-and-nav/Alert-modal";
-import { SizesColumn } from "./column";
+import { WeightColumn } from "./column";
 type CellActionsProps = {
-  data: SizesColumn;
+  data: WeightColumn;
 };
 
 const CellActions = ({ data }: CellActionsProps) => {

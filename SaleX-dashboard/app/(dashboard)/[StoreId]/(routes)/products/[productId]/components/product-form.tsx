@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { Trash } from "lucide-react";
-import { Categories, Colors, Image, Products, Sizes } from "@prisma/client";
+import { Categories, Colors, Image, Products, Weight } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 
 import { Input } from "@/components/ui/input";
@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/select";
 import ImageUpload from "@/components/ui/Image-upload";
 import { Checkbox } from "@/components/ui/checkbox";
+import useDevCheckStore from "@/store/dev-check";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -41,8 +42,10 @@ const formSchema = z.object({
   CategoriesId: z.string().min(1),
   colorId: z.string().min(1),
   sizesId: z.string().min(1),
+  expiryDate: z.string().min(1),
   Featured: z.boolean().default(false).optional(),
   Archived: z.boolean().default(false).optional(),
+  quantity: z.string().min(1),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -55,7 +58,9 @@ interface ProductFormProps {
     | null;
   categories: Categories[];
   colors: Colors[];
-  sizes: Sizes[];
+  sizes: Weight[];
+  expiryDate: string[];
+  quanity: string;
 }
 
 export const ProductForm: React.FC<ProductFormProps> = ({
@@ -63,13 +68,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   categories,
   sizes,
   colors,
+  expiryDate,
 }) => {
   const params = useParams();
   const router = useRouter();
-
+  const { devMode } = useDevCheckStore();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const title = initialData ? "Edit product" : "Create product";
   const description = initialData ? "Edit a product." : "Add a new product";
   const toastMessage = initialData ? "Product updated." : "Product created.";
@@ -89,6 +94,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         sizesId: "",
         Featured: false,
         Archived: false,
+        expiryDate: "6",
       };
 
   const form = useForm<ProductFormValues>({
@@ -102,10 +108,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       if (initialData) {
         await axios.put(
           `/api/${params.StoreId}/products/${params.productId}`,
-          data
+          { ...data, expiryDate: parseInt(data.expiryDate), quantity: Number(data.quantity)}
         );
       } else {
-        await axios.post(`/api/${params.StoreId}/products`, data);
+        await axios.post(`/api/${params.StoreId}/products`, {...data,expiryDate:parseInt(data.expiryDate),quantity:Number(data.quantity)});
       }
       router.refresh();
       router.push(`/${params.StoreId}/products`);
@@ -253,10 +259,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             />
             <FormField
               control={form.control}
-              name="sizesId"
+              name="expiryDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Sizes</FormLabel>
+                  <FormLabel>Expiiry Date(In months)</FormLabel>
                   <Select
                     disabled={loading}
                     onValueChange={field.onChange}
@@ -267,7 +273,39 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       <SelectTrigger>
                         <SelectValue
                           defaultValue={field.value}
-                          placeholder="Select a size"
+                          placeholder="Select an expiry date"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {expiryDate.map((expiry) => (
+                        <SelectItem key={expiry} value={expiry}>
+                          {expiry}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="sizesId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Weight</FormLabel>
+                  <Select
+                    disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a weight"
                         />
                       </SelectTrigger>
                     </FormControl>
@@ -315,48 +353,70 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
-            <FormField
+             <FormField
               control={form.control}
-              name="Featured"
+              name="quantity"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormItem>
+                  <FormLabel>Quantity</FormLabel>
                   <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      // @ts-ignore
-                      onCheckedChange={field.onChange}
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="Quantity of Products"
+                      {...field}
                     />
                   </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Featured</FormLabel>
-                    <FormDescription>
-                      This product will appear on the home page
-                    </FormDescription>
-                  </div>
+                  <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="Archived"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      // @ts-ignore
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Archived</FormLabel>
-                    <FormDescription>
-                      This product will not appear anywhere in the store.
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
+            {devMode && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="Featured"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          // @ts-ignore
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Featured</FormLabel>
+                        <FormDescription>
+                          This product will appear on the home page
+                        </FormDescription>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="Archived"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          // @ts-ignore
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Archived</FormLabel>
+                        <FormDescription>
+                          This product will not appear anywhere in the store.
+                        </FormDescription>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
