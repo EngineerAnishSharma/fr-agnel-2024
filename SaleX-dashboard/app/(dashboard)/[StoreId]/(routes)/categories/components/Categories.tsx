@@ -9,41 +9,50 @@ import { Separator } from "@/components/ui/separator";
 import { DataTable } from "../../../../../../components/ui/data-table";
 import { CategoryColumn, columns } from "./column";
 import ApiList from "../../../../../../components/ui/api-list";
+import useDevCheckStore from "@/store/dev-check";
 
 type CategoriesProps = {
-    CategoriesData : CategoryColumn[]
-}
+  CategoriesData: CategoryColumn[];
+};
 
-const Categories = ({CategoriesData}:CategoriesProps) => {
+const Categories = ({ CategoriesData }: CategoriesProps) => {
   const router = useRouter();
   const params = useParams();
-
+  const { devMode } = useDevCheckStore();
 
   return (
     <>
-    <div className="flex items-center justify-between">
-      <div>
-        <Heading
-          title={`Categories(${CategoriesData.length})`}
-          description="Create and manage Categories"
-        />
+      <div className="flex items-center justify-between">
+        <div>
+          <Heading
+            title={`Categories(${CategoriesData.length})`}
+            description="Create and manage Categories"
+          />
+        </div>
+        <Button
+          onClick={() => {
+            router.push(`/${params.StoreId}/categories/new`);
+          }}
+          className="gap-x-2 hover:bg-secondary hover:text-primary"
+        >
+          <Plus className="h-5 w-4" />
+          New
+        </Button>
       </div>
-      <Button
-        onClick={() => {
-          router.push(`/${params.StoreId}/categories/new`);
-        }}
-        className="gap-x-2 hover:bg-secondary hover:text-primary"
-      >
-        <Plus className="h-5 w-4" />
-        New
-      </Button>
-    </div>
-    <Separator/>
-      <DataTable searchKey="name" columns={columns} data={CategoriesData}/>
+      <Separator />
+      <DataTable searchKey="name" columns={columns} data={CategoriesData} />
       <div className="w-full mt-10 ml-2">
-      <Heading title={'Api'} description="Api's to connected frontend and backend"/>
-      <Separator/>
-      <ApiList Entityname="categories" EntityIdname="{CategoriesId}"/>
+        {devMode && (
+          <>
+            <Heading
+              title={"Api"}
+              description="Api's to connected frontend and backend"
+            />
+            <Separator />
+
+            <ApiList Entityname="categories" EntityIdname="{CategoriesId}" />
+          </>
+        )}
       </div>
     </>
   );
