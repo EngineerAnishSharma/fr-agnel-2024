@@ -63,7 +63,7 @@ def artist_history():
         image_file.save("temp_image.jpg")
         img = PIL.Image.open('temp_image.jpg')
         model = genai.GenerativeModel('gemini-pro-vision')
-        prompt = "Identify the given artician product and tell us about history of it without any special characters or numbers"
+        prompt = "Identify the given artician product and tell us how can we scale in the market with more profit margin without any special characters or numbers"
         result = model.generate_content([prompt, img], stream=True)
         result.resolve()
         os.remove("temp_image.jpg")

@@ -7,6 +7,7 @@ const converttoBase64 = (file: File) => {
     reader.onload = () => {
       resolve(reader.result);
     };
+    
     reader.onerror = (error) => {
       console.log("Error:", error);
       reject(reader.result);

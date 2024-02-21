@@ -1,7 +1,7 @@
 "use client";
 import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis } from "recharts";
 type OverviewGraphProps = {
-  data: any[] | null;
+  data: any[6] | null;
 };
 
 const BarGraphDiagram = ({ data }: OverviewGraphProps) => {
