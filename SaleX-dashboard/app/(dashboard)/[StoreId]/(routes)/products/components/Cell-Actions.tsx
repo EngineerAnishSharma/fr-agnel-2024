@@ -118,7 +118,7 @@ const CellActions = ({ data }: CellActionsProps) => {
   };
   const generateQR = async () => {
     QRCode.toDataURL(
-      `https://79f4-103-116-169-162.ngrok-free.app?name=${data.name}&price=${data.price}&weight=${data.size}&expiryMonth=${data.expiryData}&quantity=${data.quantity}&ImageUrl=${data.ImageUrl}&productId=${data.id}`
+      `https://a669-103-116-169-162.ngrok-free.app?name=${data.name}&price=${data.price}&weight=${data.size}&expiryMonth=${data.expiryData}&quantity=${data.quantity}&ImageUrl=${data.ImageUrl}&productId=${data.id}&storeId=${data.storeId}`
     ).then(SetSrc);
     return true;
   };
