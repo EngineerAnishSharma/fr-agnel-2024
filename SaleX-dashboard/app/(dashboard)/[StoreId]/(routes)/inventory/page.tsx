@@ -5,6 +5,7 @@ import "./inventory.css";
 import toast, { Toaster } from "react-hot-toast";
 import Product from "./Product";
 import Shelf from "./Shelf";
+import TestModal from "./TestModal";
 
 export type ShelfType = {
   shelfName: string;
@@ -31,15 +32,16 @@ const data: ShelfType[] = [
         name: "mango",
         expiryDate: "10-11-2024",
         weight: "5",
-        image: "image",
+        image: "https://freepngimg.com/thumb/mango/1-2-mango-png-thumb.png",
         quantity: 5,
       },
       {
         id: "2",
-        name: "apple",
-        expiryDate: "12-31-2024",
-        weight: "3",
-        image: "image",
+        image:
+          "https://www.freepnglogos.com/uploads/potato-chips-png/lays-potato-chips-buy-lays-lays-potato-chips-product-12.png",
+        name: "lays",
+        expiryDate: "10-11-2024",
+        weight: "2",
         quantity: 3,
       },
       {
@@ -47,7 +49,7 @@ const data: ShelfType[] = [
         name: "banana",
         expiryDate: "11-30-2024",
         weight: "2",
-        image: "image",
+        image: "https://clipart-library.com/image_gallery2/Banana.png",
         quantity: 2,
       },
     ],
@@ -58,11 +60,12 @@ const data: ShelfType[] = [
     products: [
       {
         id: "4",
-        name: "parle G",
         expiryDate: "09-30-2024",
-        weight: "4",
-        image: "image",
-        quantity: 4,
+        image:
+          "https://www.freeiconspng.com/thumbs/coca-cola-png/bottle-coca-cola-png-transparent-2.png",
+        name: "Coca Cola",
+        quantity: 10,
+        weight: "1",
       },
     ],
   },
@@ -72,27 +75,11 @@ const data: ShelfType[] = [
     products: [
       {
         id: "5",
-        name: "Apple",
-        expiryDate: "12-31-2024",
-        weight: "1",
-        image: "image",
-        quantity: 10,
-      },
-      {
-        id: "6",
-        name: "Banana",
-        expiryDate: "12-31-2024",
-        weight: "2",
-        image: "image",
-        quantity: 8,
-      },
-      {
-        id: "7",
         name: "Orange",
         expiryDate: "12-31-2024",
-        weight: "3",
-        image: "image",
-        quantity: 6,
+        weight: "1",
+        image: "https://clipart-library.com/img/990750.png",
+        quantity: 10,
       },
     ],
   },
@@ -100,12 +87,54 @@ const data: ShelfType[] = [
 
 const Page = () => {
   const [shelfs, setShelfs] = useState<ShelfType[]>(data);
+  const [isShellModalOpen, setIsShellModalOpen] = useState(false);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+
   const [showInventory, setShowInventory] = useState(true);
   const [newShelf, setNewShelf] = useState<ShelfType>({
     shelfName: "",
     shelfId: "",
     products: [],
   });
+  //MODAL
+  const openShellModal = () => {
+    setIsShellModalOpen(true);
+  };
+
+  const closeShellModal = () => {
+    setIsShellModalOpen(false);
+  };
+  const openProductModal = () => {
+    setIsProductModalOpen(true);
+  };
+
+  const closeProductModal = () => {
+    setIsProductModalOpen(false);
+  };
+
+  const handleShellConfirm = () => {
+    // Handle confirm logic here
+    console.log("Confirmed!");
+    closeShellModal();
+  };
+
+  const handleShellCancel = () => {
+    // Handle cancel logic here
+    console.log("Cancelled!");
+    closeShellModal();
+  };
+
+  const handleProductConfirm = () => {
+    // Handle confirm logic here
+    console.log("Confirmed!");
+    closeProductModal();
+  };
+
+  const handleProductCancel = () => {
+    // Handle cancel logic here
+    console.log("Cancelled!");
+    closeProductModal();
+  };
   const [newProduct, setNewProduct] = useState<ProductType>({
     id: "",
     name: "",
@@ -229,71 +258,242 @@ const Page = () => {
 
   return (
     <>
-      <button onClick={() => setShowInventory(!showInventory)}>
-        Show Inventory
-      </button>
-      <input
-        type="text"
-        value={newShelf.shelfName}
-        placeholder="Enter shelf name"
-        onChange={(e) =>
-          setNewShelf({ ...newShelf, shelfName: e.target.value })
-        }
-      />
-      <button onClick={handleAddShelf}>Add Shelf</button>
+      <div className="flex justify-center items-center">
+        <button
+          className="m-2 relative rounded px-5 py-2.5 overflow-hidden group bg-blue-500 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300"
+          onClick={() => setShowInventory(!showInventory)}
+        >
+          <span className="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+          {!showInventory ? "Show Inventory" : "Hide Inventory "}
+        </button>
 
-      <br />
-      <br />
-      <br />
+        <div>
+          <button
+            data-modal-target="popup-modal"
+            data-modal-toggle="popup-modal"
+            className="m-2   rounded px-5 py-2.5 overflow-hidden group bg-zinc-500 hover:bg-gradient-to-r hover:from-zinc-500 hover:to-zinc-400 text-white hover:ring-2 hover:ring-offset-2 hover:zinc-green-400 transition-all ease-out duration-300"
+            onClick={openShellModal}
+          >
+            <span className=" right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+            Add Shelf
+          </button>
+          <div className="">
+            <div
+              id="popup-modal"
+              tabIndex={-1}
+              className={`${
+                isShellModalOpen ? "fixed" : "hidden"
+              } overflow-hidden overflow-x-hidden top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  h-screen bg-gray-800 bg-opacity-50`}
+            >
+              <div className="h-screen flex justify-center items-center p-4 w-full ">
+                <div className=" bg-white rounded-lg  backdrop-blur shadow dark:bg-gray-700">
+                  <button
+                    type="button"
+                    className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="popup-modal"
+                    onClick={closeShellModal}
+                  >
+                    <svg
+                      className="w-3 h-3"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 14"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                      />
+                    </svg>
+                    <span className="sr-only">Close modal</span>
+                  </button>
+                  <div className="p-4  justify-center items-center md:p-5 text-center">
+                    <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                      Add this Shelf:
+                    </h3>
+                    <div className="flex py-4 justify-center items-center">
+                      <input
+                        type="text"
+                        className="bg-[#f2f4f6] placeholder:text-zinc-500 px-4 h-10 rounded-sm border border-zinc-200"
+                        value={newShelf.shelfName}
+                        placeholder="Enter shelf name"
+                        onChange={(e) =>
+                          setNewShelf({
+                            ...newShelf,
+                            shelfName: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
 
-      <input
-        type="text"
-        placeholder="Enter product name"
-        value={newProduct.name}
-        onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-      />
+                    <button
+                      data-modal-hide="popup-modal"
+                      type="button"
+                      className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                      onClick={handleAddShelf}
+                    >
+                      Yes, I'm sure
+                    </button>
+                    <button
+                      data-modal-hide="popup-modal"
+                      type="button"
+                      className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                      onClick={handleShellCancel}
+                    >
+                      No, cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <input
-        type="text"
-        placeholder="Enter expiry date"
-        value={newProduct.expiryDate}
-        onChange={(e) =>
-          setNewProduct({ ...newProduct, expiryDate: e.target.value })
-        }
-      />
+        <div>
+          {/* <button
+        data-modal-target="popup-modal"
+        data-modal-toggle="popup-modal"
+        className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        type="button"
+        onClick={openModal}
+      >
+Add Product 
+      </button> */}
+          <button
+            data-modal-target="popup-modal"
+            data-modal-toggle="popup-modal"
+            className="m-2   rounded px-5 py-2.5 overflow-hidden group bg-zinc-500 hover:bg-gradient-to-r hover:from-zinc-500 hover:to-zinc-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-zinc-400 transition-all ease-out duration-300"
+            onClick={openProductModal}
+          >
+            <span className=" right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+            Add Product
+          </button>
+          <div className="">
+            <div
+              id="popup-modal"
+              tabIndex={-1}
+              className={`${
+                isProductModalOpen ? "fixed" : "hidden"
+              } overflow-hidden overflow-x-hidden top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  h-screen bg-gray-800 bg-opacity-50`}
+            >
+              <div className="h-screen flex justify-center items-center p-4 w-full ">
+                <div className=" bg-white rounded-lg  backdrop-blur shadow dark:bg-gray-700">
+                  <button
+                    type="button"
+                    className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="popup-modal"
+                    onClick={closeProductModal}
+                  >
+                    <svg
+                      className="w-3 h-3"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 14"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                      />
+                    </svg>
+                    <span className="sr-only">Close modal</span>
+                  </button>
+                  <div className="p-4  justify-center items-center md:p-5 text-center">
+                    <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                      Add this Product?
+                    </h3>
+                    <div className="flex max-w-4xl mx-auto flex-col gap-4 py-4 justify-center items-center">
+                      <input
+                        type="text"
+                        value={newProduct.name}
+                        onChange={(e) =>
+                          setNewProduct({ ...newProduct, name: e.target.value })
+                        }
+                        className="bg-[#f2f4f6] w-full placeholder:text-zinc-500 px-4 h-10 rounded-sm border border-zinc-200"
+                        placeholder="Enter product name"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Enter expiry date"
+                        value={newProduct.expiryDate}
+                        onChange={(e) =>
+                          setNewProduct({
+                            ...newProduct,
+                            expiryDate: e.target.value,
+                          })
+                        }
+                        className="bg-[#f2f4f6] w-full placeholder:text-zinc-500 px-4 h-10 rounded-sm border border-zinc-200"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Enter weight"
+                        value={newProduct.weight}
+                        onChange={(e) =>
+                          setNewProduct({
+                            ...newProduct,
+                            weight: e.target.value,
+                          })
+                        }
+                        className="bg-[#f2f4f6] w-full placeholder:text-zinc-500 px-4 h-10 rounded-sm border border-zinc-200"
+                      />
+                      <input
+                        accept="image/*"
+                        className="target py-1 m-2 bg-[#f2f4f6] w-full placeholder:text-zinc-500 px-4 h-10 rounded-sm border border-zinc-200"
+                        placeholder="Enter image url"
+                        type="file"
+                        onChange={(e) =>
+                          setNewProduct({
+                            ...newProduct,
+                            image: e.target.value,
+                          })
+                        }
+                      />
+                      <input
+                        type="text"
+                        className="bg-[#f2f4f6] w-full placeholder:text-zinc-500 px-4 h-10 rounded-sm border border-zinc-200"
+                        placeholder="Enter quantity"
+                        value={newProduct.quantity}
+                        onChange={(e) =>
+                          setNewProduct({
+                            ...newProduct,
+                            quantity: parseInt(e.target.value),
+                          })
+                        }
+                      />
+                    </div>
 
-      <input
-        type="text"
-        placeholder="Enter weight"
-        value={newProduct.weight}
-        onChange={(e) =>
-          setNewProduct({ ...newProduct, weight: e.target.value })
-        }
-      />
-
-      <input
-        className="target"
-        accept="image/*"
-        placeholder="Enter image url"
-        type="file"
-        onChange={(e) =>
-          setNewProduct({ ...newProduct, image: e.target.value })
-        }
-      />
-
-      <input
-        type="number"
-        placeholder="Enter quantity"
-        value={newProduct.quantity}
-        onChange={(e) =>
-          setNewProduct({ ...newProduct, quantity: parseInt(e.target.value) })
-        }
-      />
-
-      <button onClick={handleAddProduct}>Add Product</button>
+                    <button
+                      data-modal-hide="popup-modal"
+                      type="button"
+                      className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                      onClick={handleAddProduct}
+                    >
+                      Submit
+                    </button>
+                    <button
+                      data-modal-hide="popup-modal"
+                      type="button"
+                      className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                      onClick={handleProductCancel}
+                    >
+                      No, cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <DragDropContext onDragEnd={handleDragAndDrop}>
-        <div className="wrapper">
+        <div className="wrapper ">
           <div className="shelfsContainer">
             {shelfs
               .filter((shelf: ShelfType) => shelf.shelfName !== "inventory")
@@ -314,6 +514,18 @@ const Page = () => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <h1 className="font-bold p-2 rounded-sm bg-inherit text-xl">
+                    Inventory
+                  </h1>
+                </div>
                 {shelfs
                   .find((shelf: ShelfType) => shelf.shelfName === "inventory")
                   ?.products.map((product: ProductType, index: number) => (

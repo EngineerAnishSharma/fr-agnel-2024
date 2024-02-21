@@ -118,7 +118,7 @@ const CellActions = ({ data }: CellActionsProps) => {
   };
   const generateQR = async () => {
     QRCode.toDataURL(
-      `https://79f4-103-116-169-162.ngrok-free.app?name=${data.name}&price=${data.price}&weight=${data.size}&expiryMonth=${data.expiryData}&quantity=${data.quantity}&ImageUrl=${data.ImageUrl}&productId=${data.id}`
+      `https://4965-103-116-169-162.ngrok-free.app?name=${data.name}&price=${data.price}&weight=${data.size}&expiryMonth=${data.expiryData}&quantity=${data.quantity}&ImageUrl=${data.ImageUrl}&productId=${data.id}&storeId=${data.storeId}`
     ).then(SetSrc);
     return true;
   };
@@ -141,14 +141,14 @@ const CellActions = ({ data }: CellActionsProps) => {
       >
         <div className="flex flex-col items-center space-y-6 justify-center ">
           <Image src={Src} alt="image" width={100} height={100} />
-          <Button
+          {/* <Button
             onClick={convertToPdf}
             variant={"default"}
             size={"sm"}
             className="bg-purple-600 self-center"
           >
             Download Pdf
-          </Button>
+          </Button> */}
         </div>
       </Modal>
       <DropdownMenu>

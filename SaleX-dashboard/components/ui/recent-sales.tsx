@@ -10,19 +10,19 @@ import { formatter } from "@/lib/utils";
 export type Data = {
   id: string;
   name: string;
-  email: string;
-  pricePaid: number;
+  price: number;
 };
+
 type SalesProps = {
   data: Data[] | null;
 };
 const Sales = ({ data }: SalesProps) => {
-  if (!data) return null; 
+  if (!data) return null;
   return (
     <Card>
       <CardHeader>
         <CardTitle>Recent Sales</CardTitle>
-        <CardDescription>Recent customers</CardDescription>
+        <CardDescription>Recent selling products</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-8">
@@ -33,11 +33,12 @@ const Sales = ({ data }: SalesProps) => {
                 <AvatarFallback>PFP</AvatarFallback>
               </Avatar>
               <div className="ml-4 space-y-1">
-                <p className="text-sm font-medium leading-none">{user.name}</p>
-                <p className="text-sm text-muted-foreground">{user.email}</p>
+                <p className="text-sm font-medium leading-none">
+                  {user.name}
+                </p>
               </div>
               <div className="ml-auto font-medium">
-                +{formatter.format(user.pricePaid)}
+                +{formatter.format(user.price)}
               </div>
             </div>
           ))}

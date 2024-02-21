@@ -4,30 +4,15 @@ import prisma from "@/prisma/client";
 export default async function getRevenue(StoreId: string) {
   if (!StoreId) return null;
 
-  const orders = await prisma.order.findMany({
-    where: {
-      StoreId,
-      isPaid: true,
+  const res = await prisma.sales.findMany({
+    where:{
+      storeId: StoreId
     },
-    include: {
-      orderItems: true,
-    },
-  });
-  const productIds = orders.flatMap((item) =>
-    item.orderItems.map((o) => o.productId)
-  );
-  const findProduct = await prisma.products.findMany({
-    where: {
-      id: {
-        in: [...productIds],
-      },
-    },
-    select: {
-      price: true,
-    },
-  });
-  const total = findProduct.reduce((initial, curritem) => {
-    return initial + curritem.price.toNumber();
-  }, 0);
-  return total;
+    select:{
+      price:true
+    }
+  })
+  if(!res) return null
+  const revenue = res.reduce((acc, curr) => acc + Number(curr.price), 0);
+  return revenue;
 }

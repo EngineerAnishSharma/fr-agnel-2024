@@ -30,3 +30,4 @@ const BarGraphDiagram = ({ data }: OverviewGraphProps) => {
 };
 
 export default BarGraphDiagram;
+

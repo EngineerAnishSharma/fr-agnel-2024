@@ -1,9 +1,11 @@
-const qrcode = require('qrcode-terminal');
-const { Client } = require('whatsapp-web.js');
+import qrcode from 'qrcode-terminal';
+import { Client } from 'whatsapp-web.js';
 
-const client = new Client();
+const client = new Client({
+    // Add your client options here
+});
 
-client.on('qr', (qrCode) => {
+client.on('qr', (qrCode: string) => {
     // Display the QR code for the user to scan
     qrcode.generate(qrCode, { small: true });
 });
