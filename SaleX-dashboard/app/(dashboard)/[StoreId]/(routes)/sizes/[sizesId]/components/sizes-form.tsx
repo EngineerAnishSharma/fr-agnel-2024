@@ -20,24 +20,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
-import { Sizes } from "@prisma/client";
+import { Weight } from "@prisma/client";
 import { AlertModal } from "../../../../../../../components/modals-and-nav/Alert-modal";
 
 type SizesFormProps = {
-  initialdata: Sizes | null;
+  initialdata: Weight | null;
 };
 const formSchema = z.object({
   name: z.string().min(1),
   value: z.string().min(1),
 });
 
-const SizeForm = ({ initialdata }: SizesFormProps) => {
-  const title = initialdata ? "Edit Size" : "Create size";
+const WeightForm = ({ initialdata }: SizesFormProps) => {
+  const title = initialdata ? "Edit weight" : "Create weight";
   const description = initialdata
-    ? "Edit the properties of a size"
-    : "Add a new size";
+    ? "Edit the properties of a weight"
+    : "Add a new weight";
   const buttontag = initialdata ? "Change" : "Create";
-  const toastMsg = initialdata ? "Edited the Size" : "Added new size";
+  const toastMsg = initialdata ? "Edited the weight" : "Added new weight";
 
   const [loading, setloading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -75,7 +75,7 @@ const SizeForm = ({ initialdata }: SizesFormProps) => {
     try {
       setloading(true);
       await axios.delete(`/api/${params.StoreId}/sizes/${params.sizesId}`);
-      toast.success("Size successfully deleted");
+      toast.success("weight successfully deleted");
       router.refresh();
       router.push(`/${params.StoreId}/sizes`);
     } catch (err) {
@@ -123,7 +123,7 @@ const SizeForm = ({ initialdata }: SizesFormProps) => {
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Size name"
+                      placeholder="weight name"
                       {...field}
                     />
                   </FormControl>
@@ -136,11 +136,11 @@ const SizeForm = ({ initialdata }: SizesFormProps) => {
               name="value"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Value</FormLabel>
+                  <FormLabel>Value(In Kilograms)</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Size value"
+                      placeholder="weight value(in kgs)"
                       {...field}
                     />
                   </FormControl>
@@ -159,4 +159,4 @@ const SizeForm = ({ initialdata }: SizesFormProps) => {
   );
 };
 
-export default SizeForm;
+export default WeightForm;

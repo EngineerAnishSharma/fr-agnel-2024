@@ -17,6 +17,8 @@ export async function POST(
       sizesId,
       colorId,
       Image,
+      expiryDate,
+      quantity,
     } = await req.json();
 
     if (!userId) {
@@ -25,6 +27,9 @@ export async function POST(
 
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
+    }
+    if(!quantity){
+      return new NextResponse("Quantity is required", { status: 400 });
     }
 
     if (!Image || !Image.length) {
@@ -76,6 +81,8 @@ export async function POST(
             data: [...Image.map((image: { url: string }) => image)],
           },
         },
+        expiryDate,
+        quantity
       },
     });
     return NextResponse.json(Addproduct);
@@ -110,7 +117,7 @@ export async function GET(
         Image: true,
         categories: true,
         color: true,
-        size: true,
+        weight: true,
       },
       orderBy: {
         createdAt: "desc",

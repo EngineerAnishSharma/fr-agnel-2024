@@ -1,0 +1,74 @@
+.card {
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  padding: 10px;
+  width: 300px;
+  background-color: transparent;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 10px;
+  height: 100vh;
+  background-color: white;
+  overflow: hidden;
+  gap: 1rem;
+  transition: flex 1s ease-in-out;
+}
+
+.shelfsContainer {
+  flex: 2;
+  background-size: cover;
+  background-image: url("https://img.freepik.com/free-photo/clapboard-wall_1249-94.jpg?w=740&t=st=1708464446~exp=1708465046~hmac=ccef08be93a4181bbc4c57764d7a4577acca7376432ebcf0ad843b1437e883ef");
+  background-repeat: no-repeat;
+  padding: 10px;
+  transition: flex 1s ease-in-out;
+  display: flex;
+  display: inline;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  transition: all 1s ease;
+  overflow: auto;
+}
+
+.inventory {
+  flex: 1;
+  background-image: url("https://images.unsplash.com/photo-1547623641-d2c56c03e2a7?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  padding: 10px;
+  background-repeat: no-repeat;
+
+  flex-grow: 0;
+  transition: flex-grow 1s ease-in-out, opacity 1s ease-in-out;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  transition: all 1s ease;
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+
+.inventory.hidden {
+  flex-grow: 0;
+  visibility: collapse;
+}
+
+.inventory.visible {
+  flex-grow: 1;
+  visibility: visible;
+}
+
+.dashboard::-webkit-scrollbar,
+.inventory::-webkit-scrollbar {
+  width: 0;
+}
+
+@media (max-width: 600px) {
+  .wrapper {
+    flex-direction: column;
+  }
+  .inventory {
+    flex-direction: column;
+  }
+}
