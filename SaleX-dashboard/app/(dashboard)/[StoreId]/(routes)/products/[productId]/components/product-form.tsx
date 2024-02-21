@@ -59,7 +59,7 @@ interface ProductFormProps {
   categories: Categories[];
   colors: Colors[];
   sizes: Weight[];
-  expiryDate: string[];
+  expiryDate: string
   quanity: string;
 }
 

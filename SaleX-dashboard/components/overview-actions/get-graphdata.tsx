@@ -9,27 +9,38 @@ export default async function getGraphData(StoreId: string) {
  
   if (!StoreId) return null;
  
-  const paidOrders = await prisma.order.findMany({
+  // const paidOrders = await prisma.order.findMany({
+  //   where: {
+  //     StoreId,
+  //     isPaid: true,
+  //   },
+  //   include: {
+  //     orderItems: {
+  //       include: {
+  //         product: true,
+  //       },
+  //     },
+  //   },
+  // });
+  const paidSales = await prisma.sales.findMany({
     where: {
-      StoreId,
-      isPaid: true,
+      storeId: StoreId,
     },
-    include: {
-      orderItems: {
-        include: {
-          product: true,
-        },
-      },
-    },
+    include:{
+      Products:{
+        select:{
+          price:true,
+          createdAt:true,
+          
+        }
+      }
+    }
   });
   const monthlyRevenue: { [key: number]: number } = {};
-  for (const order of paidOrders) {
-    const month = order.createdAt.getMonth();
-    let revenueFororder = 0;
-    for (const item of order.orderItems) {
-      revenueFororder += item.product.price.toNumber();
-    }
-    monthlyRevenue[month] = (monthlyRevenue[month] || 0) + revenueFororder;
+  for (const sale of paidSales) {
+    const month = sale.Products.createdAt.getMonth(); // Add 1 to get the correct month value
+    const revenueForSale = Number(sale.Products.price);
+    monthlyRevenue[month] = (monthlyRevenue[month] || 0) + revenueForSale;
   }
   const data: GraphData[] = [
     {
@@ -84,5 +95,5 @@ export default async function getGraphData(StoreId: string) {
   for (const month in monthlyRevenue) {
     data[parseInt(month)].total = monthlyRevenue[parseInt(month)];
   }
-  return data
+  return data;
 }

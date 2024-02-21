@@ -4,9 +4,6 @@ const Product = ({
   id,
   name,
   image,
-  expiryDate,
-  weight,
-  quantity,
   index,
 }: any) => {
   return (

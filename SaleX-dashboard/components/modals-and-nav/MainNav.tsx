@@ -4,9 +4,9 @@ import React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
+
 const MainNav = ({
-  className,
-  ...props
+  className
 }: React.HtmlHTMLAttributes<HTMLElement>) => {
   const params = useParams();
   const pathname = usePathname();
@@ -28,9 +28,9 @@ const MainNav = ({
       active: pathname === `/${params.StoreId}/capturespace`,
     },
     {
-      href: `/${params.StoreId}/inventory`,
-      label: "Inventory",
-      active: pathname === `/${params.StoreId}/inventory`,
+      href: `/${params.StoreId}/analysis`,
+      label: "Analysis",
+      active: pathname === `/${params.StoreId}/analysis`,
     },
     {
       href: `/${params.StoreId}/colors`,
@@ -51,6 +51,11 @@ const MainNav = ({
       href: `/${params.StoreId}/orders`,
       label: "Orders",
       active: pathname === `/${params.StoreId}/orders`,
+    },
+    {
+      href: `/${params.StoreId}/inventory`,
+      label: "Inventory",
+      active: pathname === `/${params.StoreId}/inventory`,
     },
     {
       href: `/${params.StoreId}/settings`,
@@ -80,5 +85,8 @@ const MainNav = ({
     </>
   );
 };
-
 export default MainNav;
+
+// Add the missing closing curly brace
+
+

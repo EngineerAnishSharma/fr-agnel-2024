@@ -30,6 +30,7 @@ const BillboardPage = async ({ params }: { params: { StoreId: string } }) => {
     color: product.color.value.toString(), // Convert to string
     expiryData: product.expiryDate,
     quantity: product.quantity,
+    storeId: product.StoreId,
     createdAt: product.createdAt.toLocaleDateString(),
     ImageUrl: product.Image[0].url
   }));

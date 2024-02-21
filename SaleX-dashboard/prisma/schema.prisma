@@ -86,6 +86,7 @@ model Products {
   store        Store       @relation("StoretoProducts", fields: [StoreId], references: [id])
   color        Colors      @relation("ProducttoColor", fields: [colorId], references: [id])
   weight       Weight      @relation("ProducttoWeight", fields: [sizesId], references: [id])
+  Sales        Sales[]
 }
 
 model Image {
@@ -117,4 +118,15 @@ model OrderItem {
   productId String
   order     Order    @relation(fields: [orderId], references: [id])
   product   Products @relation("ProducttoOrderitem", fields: [productId], references: [id])
+}
+
+model Sales {
+  id          String   @id
+  productId   String
+  productname String
+  createdAt   DateTime @default(now())
+  storeId     String?  @default("clsu746eh0000vtp4k0p9r7bw")
+  updatedAt   DateTime
+  price       Decimal
+  Products    Products @relation(fields: [productId], references: [id])
 }

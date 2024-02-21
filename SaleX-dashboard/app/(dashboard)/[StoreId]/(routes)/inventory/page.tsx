@@ -135,12 +135,6 @@ const Page = () => {
     console.log("Cancelled!");
     closeProductModal();
   };
-  //MODAL ENDS
-  //SEHLF BACKGROUND
-  const shelfbackground = {
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  };
   const [newProduct, setNewProduct] = useState<ProductType>({
     id: "",
     name: "",

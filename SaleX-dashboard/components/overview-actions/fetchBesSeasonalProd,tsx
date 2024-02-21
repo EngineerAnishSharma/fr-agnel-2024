@@ -1,0 +1,49 @@
+import prisma from "../../prisma/client"
+
+export default async function getBestSeasonalProduct(StoreId: string) {
+    const res = await prisma.sales.findMany({
+        where: {
+            storeId: StoreId,
+        },
+        select: {
+            productname: true,
+            price: true,
+            productId: true,
+        },
+    });
+    const productCounts: { [key: string]: number } = {};
+    res.forEach((sale: any) => {
+        const { productId } = sale;
+        if (productCounts[productId]) {
+            productCounts[productId]++;
+        } else {
+            productCounts[productId] = 1;
+        }
+    });
+
+    let maxCount = 0;
+    let bestProduct: string | null = null;
+
+    for (const productId in productCounts) {
+        if (productCounts[productId] > maxCount) {
+            maxCount = productCounts[productId];
+            bestProduct = productId;
+        }
+    }
+
+    if (bestProduct === null) return null;
+    const fetchProduct = await prisma.products.findUnique({
+        where: {
+            id: bestProduct,
+        },
+        select: {
+            name: true,
+            price: true,
+            id: true,
+        },
+    });
+    if (!fetchProduct) return null;
+    console.log("Best Product:", fetchProduct.name);
+    console.log("Price:", fetchProduct.price);
+    return fetchProduct;
+}
