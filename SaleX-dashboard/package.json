@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "bot": "tsx scripts/bot.js"
+    "test": "tsx lib/imageSpaceChecker.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.21.15",

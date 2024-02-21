@@ -18,13 +18,12 @@ const Product = ({
             {...provided.dragHandleProps}
             {...provided.draggableProps}
             ref={provided.innerRef}
+            style={{
+              width: "200px",
+              height: "200px",
+            }}
           >
-            {id}
-            {name}
-            {expiryDate}
-            {weight}
-            {image}
-            {quantity}
+            <img src={image} alt={name} className="your-img-classes" />
           </div>
         )}
       </Draggable>
